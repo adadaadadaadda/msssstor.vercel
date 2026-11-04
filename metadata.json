@@ -1,0 +1,6 @@
+{
+  "name": "FreshCorner Supermarket",
+  "description": "Premium neighborhood grocery mart website with WhatsApp ordering, rich product categories, and fast 45-minute home delivery.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

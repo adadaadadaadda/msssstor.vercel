@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshMart Supermarket | Fresh Groceries Delivered to Your Door</title>
+    <meta name="description" content="Your trusted neighborhood supermarket. Fresh produce, daily essentials, dairy, and household items. Order conveniently via WhatsApp!">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        accent: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+        .whatsapp-pulse {
+            animation: pulse-border 2s infinite;
+        }
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+        .page-view {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .page-view.active {
+            display: block;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+    <!-- ==========================================
+         STORE CONFIGURATION SCRIPT
+         (Edit store details easily here!)
+    ========================================== -->
+    <script>
+        const STORE_CONFIG = {
+            name: "FreshCorner Mart",
+            tagline: "Your Daily Dose of Freshness & Quality",
+            phone: "+92 300 1234567",
+            whatsapp: "923001234567", // Numbers only without '+' or spaces for wa.me links
+            location: "Shop #14, Green Valley Commercial Center, Main Boulevard, Sector G-11, Islamabad",
+            city: "Islamabad, Pakistan",
+            email: "support@freshcornermart.com",
+            timings: "Open 7 Days a Week: 07:30 AM – 11:30 PM",
+            googleMapsIframe: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d106197.89279769018!2d72.9234856614486!3d33.684420199999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dfbfd07891722f%3A0x6059515c3bdb02b6!2sIslamabad!5e0!3m2!1sen!2s!4v1700000000000!5m2!1sen!2s"
+        };
+    </script>
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-brand-900 text-brand-100 text-xs py-2 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div class="flex items-center gap-4">
+                <span><i class="fa-solid fa-clock mr-1 text-accent-400"></i> <span class="cfg-timings">07:30 AM – 11:30 PM</span></span>
+                <span class="hidden md:inline"><i class="fa-solid fa-location-dot mr-1 text-accent-400"></i> <span class="cfg-city">Sector G-11, Islamabad</span></span>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="#" onclick="openWhatsAppOrder()" class="text-accent-400 hover:text-white transition flex items-center gap-1 font-semibold">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Fast Delivery within 45 Mins!
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sticky Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Brand / Logo -->
+                <a href="#home" onclick="navigate('home')" class="flex items-center gap-3 group">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-brand-500 flex items-center justify-center text-white text-2xl shadow-md shadow-brand-500/20 group-hover:scale-105 transition">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black tracking-tight text-slate-900 block leading-tight cfg-name">FreshCorner</span>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-brand-600 block">Supermarket</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Nav Menu -->
+                <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+                    <a href="#home" onclick="navigate('home')" class="nav-link text-brand-600 transition hover:text-brand-600">Home</a>
+                    <a href="#products" onclick="navigate('products')" class="nav-link transition hover:text-brand-600">Categories & Products</a>
+                    <a href="#about" onclick="navigate('about')" class="nav-link transition hover:text-brand-600">About Us</a>
+                    <a href="#contact" onclick="navigate('contact')" class="nav-link transition hover:text-brand-600">Contact & Location</a>
+                </nav>
+
+                <!-- Header Actions -->
+                <div class="hidden sm:flex items-center gap-4">
+                    <a href="#" onclick="openWhatsAppOrder()" class="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-md shadow-brand-600/20 transition hover:-translate-y-0.5">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>Order on WhatsApp</span>
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Hamburger -->
+                <button id="mobileMenuBtn" class="md:hidden text-2xl text-slate-700 focus:outline-none p-2" aria-label="Toggle Navigation Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Drawer -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-slate-200 px-6 py-5 space-y-4 shadow-lg animate-fadeIn">
+            <a href="#home" onclick="navigate('home'); toggleMobileMenu()" class="block font-semibold text-slate-700 py-1 hover:text-brand-600">Home</a>
+            <a href="#products" onclick="navigate('products'); toggleMobileMenu()" class="block font-semibold text-slate-700 py-1 hover:text-brand-600">Categories & Products</a>
+            <a href="#about" onclick="navigate('about'); toggleMobileMenu()" class="block font-semibold text-slate-700 py-1 hover:text-brand-600">About Us</a>
+            <a href="#contact" onclick="navigate('contact'); toggleMobileMenu()" class="block font-semibold text-slate-700 py-1 hover:text-brand-600">Contact & Location</a>
+            <div class="pt-3 border-t border-slate-100">
+                <a href="#" onclick="openWhatsAppOrder(); toggleMobileMenu()" class="w-full justify-center inline-flex items-center gap-2 bg-brand-600 text-white px-5 py-3 rounded-xl font-bold shadow-sm">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>Order on WhatsApp</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER (SPA Routing) -->
+    <main class="flex-grow">
+
+        <!-- =========================================================
+             PAGE 1: HOME
+        ========================================================== -->
+        <section id="view-home" class="page-view active">
+            <!-- Hero Section -->
+            <div class="relative bg-gradient-to-b from-brand-50/70 via-white to-slate-50 overflow-hidden py-16 lg:py-24 border-b border-slate-100">
+                <div class="absolute -top-24 -right-24 w-96 h-96 bg-accent-100 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
+                <div class="absolute top-1/2 -left-24 w-80 h-80 bg-brand-100 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid lg:grid-cols-12 gap-12 items-center">
+                        <!-- Left Copy -->
+                        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-100 text-brand-800 text-xs font-bold tracking-wide">
+                                <span class="w-2 h-2 rounded-full bg-brand-600 animate-ping"></span>
+                                Fresh Stock Delivered Daily in <span class="cfg-city">Islamabad</span>
+                            </div>
+
+                            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
+                                Fresh Daily Groceries <br class="hidden sm:inline">
+                                <span class="text-brand-600">Delivered</span> to Your Door.
+                            </h1>
+
+                            <p class="text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                                Experience farm-fresh produce, everyday grocery essentials, dairy, snacks, and household items. Quality you can trust, prices you’ll love.
+                            </p>
+
+                            <!-- CTAs -->
+                            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                                <a href="#" onclick="openWhatsAppOrder()" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-full font-bold text-base shadow-xl shadow-brand-600/25 transition-all hover:-translate-y-0.5">
+                                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                                    <span>Send Grocery List on WhatsApp</span>
+                                </a>
+                                <a href="#products" onclick="navigate('products')" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 px-7 py-4 rounded-full font-bold text-base transition">
+                                    <span>Browse Aisles</span>
+                                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                                </a>
+                            </div>
+
+                            <!-- Trust Badges -->
+                            <div class="pt-6 grid grid-cols-3 gap-4 border-t border-slate-200/80 max-w-lg mx-auto lg:mx-0">
+                                <div>
+                                    <h4 class="text-xl sm:text-2xl font-black text-slate-900">45 Mins</h4>
+                                    <p class="text-xs text-slate-500 font-medium">Fast Home Delivery</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl sm:text-2xl font-black text-slate-900">100%</h4>
+                                    <p class="text-xs text-slate-500 font-medium">Fresh & Inspected</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl sm:text-2xl font-black text-slate-900">4.9 ★</h4>
+                                    <p class="text-xs text-slate-500 font-medium">Local Community Rating</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Graphic Display -->
+                        <div class="lg:col-span-5 relative">
+                            <div class="relative mx-auto max-w-md lg:max-w-none">
+                                <div class="rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-white">
+                                    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=80" alt="Fresh Grocery Aisle" class="w-full h-96 object-cover object-center transform hover:scale-105 transition duration-500">
+                                </div>
+
+                                <!-- Floating Badge 1 -->
+                                <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-accent-100 text-accent-600 flex items-center justify-center text-xl">
+                                        <i class="fa-solid fa-truck-fast"></i>
+                                    </div>
+                                    <div>
+                                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Free Delivery</span>
+                                        <span class="text-sm font-extrabold text-slate-900">Orders above Rs. 1,500</span>
+                                    </div>
+                                </div>
+
+                                <!-- Floating Badge 2 -->
+                                <div class="absolute -top-4 -right-4 bg-white/95 backdrop-blur-sm px-4 py-2.5 rounded-2xl shadow-lg border border-slate-100 flex items-center gap-2 text-xs font-bold text-brand-700">
+                                    <i class="fa-solid fa-certificate text-brand-500 text-sm"></i>
+                                    <span>Hygienic & Sanitized</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Short Intro -->
+            <section class="py-16 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="max-w-3xl mx-auto text-center space-y-4">
+                        <span class="text-xs uppercase tracking-widest font-extrabold text-brand-600">Your Trusted Local Grocer</span>
+                        <h2 class="text-3xl font-extrabold text-slate-900 sm:text-4xl">Bringing Farm-Fresh Goodness to Your Neighborhood</h2>
+                        <p class="text-slate-600 leading-relaxed">
+                            At <strong class="cfg-name">FreshCorner Mart</strong>, we make grocery shopping effortless. From morning milk and organic veggies to late-night snacking essentials, we handpick the freshest products from verified suppliers so your family eats healthy every single day.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Categories Grid -->
+            <section class="py-16 bg-slate-50 border-t border-slate-200/60">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+                        <div>
+                            <span class="text-xs uppercase tracking-widest font-extrabold text-brand-600">Explore Aisles</span>
+                            <h2 class="text-3xl font-extrabold text-slate-900">Featured Categories</h2>
+                        </div>
+                        <a href="#products" onclick="navigate('products')" class="inline-flex items-center gap-2 text-brand-600 hover:text-brand-700 font-bold text-sm">
+                            <span>View All Products</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div id="homeCategoriesGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Why Choose Us -->
+            <section class="py-20 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-2xl mx-auto mb-16">
+                        <span class="text-xs uppercase tracking-widest font-extrabold text-brand-600">The Mart Guarantee</span>
+                        <h2 class="text-3xl font-extrabold text-slate-900 mt-2">Why Your Neighbors Shop With Us</h2>
+                        <p class="text-slate-600 mt-3">We combine neighborhood warmth with supermarket variety and modern online ordering ease.</p>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div class="p-8 rounded-3xl bg-slate-50 hover:bg-brand-50/50 border border-slate-100 transition-all hover:-translate-y-1 group">
+                            <div class="w-14 h-14 rounded-2xl bg-brand-100 text-brand-700 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
+                                <i class="fa-solid fa-seedling"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">100% Farm Fresh</h3>
+                            <p class="text-sm text-slate-600 leading-relaxed">Daily arrivals of crisp vegetables and sweet fruits sourced directly from local growers.</p>
+                        </div>
+
+                        <div class="p-8 rounded-3xl bg-slate-50 hover:bg-brand-50/50 border border-slate-100 transition-all hover:-translate-y-1 group">
+                            <div class="w-14 h-14 rounded-2xl bg-accent-100 text-accent-600 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
+                                <i class="fa-solid fa-tags"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">Fair & Honest Prices</h3>
+                            <p class="text-sm text-slate-600 leading-relaxed">Guaranteed retail prices, weekly promotions, and zero hidden markups on delivery.</p>
+                        </div>
+
+                        <div class="p-8 rounded-3xl bg-slate-50 hover:bg-brand-50/50 border border-slate-100 transition-all hover:-translate-y-1 group">
+                            <div class="w-14 h-14 rounded-2xl bg-brand-100 text-brand-700 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
+                                <i class="fa-solid fa-bolt-lightning"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">Swift 45-Min Delivery</h3>
+                            <p class="text-sm text-slate-600 leading-relaxed">Send a voice note or list on WhatsApp and our friendly riders deliver straight to your kitchen.</p>
+                        </div>
+
+                        <div class="p-8 rounded-3xl bg-slate-50 hover:bg-brand-50/50 border border-slate-100 transition-all hover:-translate-y-1 group">
+                            <div class="w-14 h-14 rounded-2xl bg-accent-100 text-accent-600 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
+                                <i class="fa-solid fa-handshake-angle"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">Trusted Community Store</h3>
+                            <p class="text-sm text-slate-600 leading-relaxed">Years of proud local service with a hassle-free doorstep exchange and return policy.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials -->
+            <section class="py-20 bg-slate-50 border-t border-slate-100">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-xl mx-auto mb-14">
+                        <span class="text-xs uppercase tracking-widest font-extrabold text-brand-600">Loved by Families</span>
+                        <h2 class="text-3xl font-extrabold text-slate-900 mt-2">What Our Customers Say</h2>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 space-y-4">
+                            <div class="flex text-amber-400 gap-1 text-sm">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="text-slate-600 text-sm italic leading-relaxed">
+                                "Ordering on WhatsApp is a lifesaver for working parents! I just snap a photo of my handwritten list, and within an hour, everything is packed neatly and delivered."
+                            </p>
+                            <div class="pt-4 border-t border-slate-100 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-700 font-bold flex items-center justify-center text-sm">FA</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">Fatima Ali</h4>
+                                    <span class="text-xs text-slate-400">Regular Customer, Sector G-11</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 space-y-4">
+                            <div class="flex text-amber-400 gap-1 text-sm">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="text-slate-600 text-sm italic leading-relaxed">
+                                "Their produce quality matches high-end supermarkets, but the rates are so much more reasonable. The dairy products are always fresh with long expiry dates."
+                            </p>
+                            <div class="pt-4 border-t border-slate-100 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-accent-100 text-accent-700 font-bold flex items-center justify-center text-sm">MK</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">Muhammad Kamran</h4>
+                                    <span class="text-xs text-slate-400">Resident, F-11</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 space-y-4">
+                            <div class="flex text-amber-400 gap-1 text-sm">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="text-slate-600 text-sm italic leading-relaxed">
+                                "Super friendly staff! Whenever an item isn’t in stock, they message me alternatives with pictures right away. It feels like having a personal shopper."
+                            </p>
+                            <div class="pt-4 border-t border-slate-100 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-sm">SZ</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">Sara Zafar</h4>
+                                    <span class="text-xs text-slate-400">Verified Shopper</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Big Call to Action (Store Visit & WhatsApp) -->
+            <section class="py-16 bg-gradient-to-tr from-brand-800 to-brand-700 text-white relative overflow-hidden">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid lg:grid-cols-2 gap-8 items-center">
+                        <div class="space-y-4 text-center lg:text-left">
+                            <span class="px-3.5 py-1.5 rounded-full bg-white/10 text-brand-200 text-xs font-semibold uppercase tracking-wider inline-block">Need Groceries Fast?</span>
+                            <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Order via WhatsApp or Visit Our Mart Today!</h2>
+                            <p class="text-brand-100 max-w-xl mx-auto lg:mx-0 font-normal">
+                                Simply drop us your order list or photo of handwritten items. Our team will verify availability, prepare the bill, and deliver it in mint condition.
+                            </p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-end">
+                            <a href="#" onclick="openWhatsAppOrder()" class="inline-flex items-center justify-center gap-3 bg-white text-brand-800 hover:bg-brand-50 px-8 py-4 rounded-full font-bold shadow-xl transition">
+                                <i class="fa-brands fa-whatsapp text-2xl text-brand-600"></i>
+                                <span>Message Us on WhatsApp</span>
+                            </a>
+                            <a href="#contact" onclick="navigate('contact')" class="inline-flex items-center justify-center gap-2 bg-brand-900/60 hover:bg-brand-900 text-white border border-brand-500 px-7 py-4 rounded-full font-bold transition">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                                <span>Find Store on Map</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- =========================================================
+             PAGE 2: PRODUCTS & CATEGORIES
+        ========================================================== -->
+        <section id="view-products" class="page-view py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Page Title -->
+                <div class="text-center max-w-3xl mx-auto mb-10">
+                    <span class="text-xs uppercase tracking-widest font-extrabold text-brand-600">Aisles & Catalog</span>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">Our Product Categories</h1>
+                    <p class="text-slate-600 mt-2 text-sm sm:text-base">Browse through our departments or search for what you need. Click "Enquire on WhatsApp" on any category to check prices or place a quick order.</p>
+                </div>
+
+                <!-- Search & Filter Controls -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-10 space-y-4">
+                    <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
+                        <!-- Search Box -->
+                        <div class="relative w-full md:w-96">
+                            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="text" id="categorySearch" placeholder="Search categories, items..." onkeyup="filterCategories()" class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition">
+                        </div>
+
+                        <!-- Reset / Total items -->
+                        <div class="text-xs text-slate-500 font-semibold flex items-center gap-2">
+                            <span>Showing:</span>
+                            <span id="categoryCountBadge" class="bg-brand-100 text-brand-800 px-2.5 py-1 rounded-full font-bold">7 Categories</span>
+                        </div>
+                    </div>
+
+                    <!-- Category Pills Filter -->
+                    <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100" id="filterPillsContainer">
+                        <button onclick="setFilter('all')" class="filter-btn active px-4 py-2 rounded-full text-xs font-bold transition bg-brand-600 text-white" data-filter="all">All Aisles</button>
+                        <button onclick="setFilter('daily')" class="filter-btn px-4 py-2 rounded-full text-xs font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200" data-filter="daily">Daily Essentials</button>
+                        <button onclick="setFilter('food')" class="filter-btn px-4 py-2 rounded-full text-xs font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200" data-filter="food">Foods & Fresh</button>
+                        <button onclick="setFilter('home')" class="filter-btn px-4 py-2 rounded-full text-xs font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200" data-filter="home">Home & Care</button>
+                    </div>
+                </div>
+
+                <!-- Categories Grid -->
+                <div id="fullProductsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Populated dynamically via JS -->
+                </div>
+
+                <!-- Custom Order Notice Card -->
+                <div class="mt-14 bg-accent-50 border border-accent-200 rounded-3xl p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="space-y-2 text-center md:text-left">
+                        <h3 class="text-xl font-bold text-slate-900">Can't find a specific item or brand?</h3>
+                        <p class="text-slate-600 text-sm max-w-xl">We stock thousands of regional and imported items that might not be highlighted here. Ask our floor managers directly on WhatsApp!</p>
+                    </div>
+                    <a href="#" onclick="openWhatsAppOrder('Hello, do you have [Item Name] in stock?')" class="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-6 py-3.5 rounded-full text-sm font-bold shadow-md transition whitespace-nowrap">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>Ask Floor Manager</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             PAGE 3: ABOUT US
+        ========================================================== -->
+        <section id="view-about" class="page-view py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+                <!-- Hero About -->
+                <div class="grid lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-6 space-y-6">
+                        <span class="text-xs uppercase tracking-widest font-extrabold text-brand-600">Our Heritage & Promise</span>
+                        <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">Your Friendly Neighborhood Store Since Day One</h1>
+                        <p class="text-slate-600 leading-relaxed">
+                            Established with the conviction that good health begins with pure, honest groceries, <strong class="cfg-name">FreshCorner Mart</strong> has grown from a humble corner storefront into our community's favorite grocery hub.
+                        </p>
+                        <p class="text-slate-600 leading-relaxed">
+                            Whether you visit our clean, organized, air-conditioned aisles or prefer ordering remotely, we inspect every fruit, monitor temperature-controlled dairy storage, and respect your family's budget.
+                        </p>
+
+                        <!-- Highlights list -->
+                        <div class="space-y-3 pt-2">
+                            <div class="flex items-center gap-3">
+                                <span class="w-6 h-6 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-xs font-bold"><i class="fa-solid fa-check"></i></span>
+                                <span class="text-slate-700 font-semibold text-sm">Direct sourcing from audited farmers and authorized FMCG distributors.</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="w-6 h-6 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-xs font-bold"><i class="fa-solid fa-check"></i></span>
+                                <span class="text-slate-700 font-semibold text-sm">Strict expiry date controls and hygienic product handling.</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="w-6 h-6 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-xs font-bold"><i class="fa-solid fa-check"></i></span>
+                                <span class="text-slate-700 font-semibold text-sm">Prompt and respectful customer dispute resolutions.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <img src="https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&w=600&q=80" alt="Supermarket Aisles" class="rounded-3xl shadow-md w-full h-64 object-cover">
+                            <img src="https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&w=600&q=80" alt="Fresh Vegetables" class="rounded-3xl shadow-md w-full h-64 object-cover mt-8">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mission & Values Cards -->
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-brand-100 text-brand-700 flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Our Mission</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">To remove the stress of grocery shopping by providing honest pricing, fresh items, and lightning-fast local home delivery.</p>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-accent-100 text-accent-600 flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Our Vision</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">To become the most dependable and customer-centric neighborhood mart throughout the region.</p>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-brand-100 text-brand-700 flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Community First</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">We support local bakery makers, dairy farmers, and seasonal fruit growers in our supply chain.</p>
+                    </div>
+                </div>
+
+                <!-- Store Operations & Timings Card -->
+                <div class="bg-slate-900 text-white rounded-3xl p-8 sm:p-12">
+                    <div class="grid lg:grid-cols-3 gap-8 items-center divide-y lg:divide-y-0 lg:divide-x divide-slate-800">
+                        <div class="space-y-2">
+                            <span class="text-brand-400 font-bold text-xs uppercase tracking-widest">Store Timings</span>
+                            <h3 class="text-xl font-bold">Always Here For You</h3>
+                            <p class="text-slate-400 text-sm cfg-timings">Open 7 Days a Week: 07:30 AM – 11:30 PM</p>
+                        </div>
+                        <div class="space-y-2 pt-6 lg:pt-0 lg:pl-8">
+                            <span class="text-brand-400 font-bold text-xs uppercase tracking-widest">Store Address</span>
+                            <h3 class="text-xl font-bold">Convenient Location</h3>
+                            <p class="text-slate-400 text-sm cfg-location">Shop #14, Green Valley Commercial Center, Islamabad</p>
+                        </div>
+                        <div class="space-y-2 pt-6 lg:pt-0 lg:pl-8">
+                            <span class="text-brand-400 font-bold text-xs uppercase tracking-widest">Quick Order Line</span>
+                            <h3 class="text-xl font-bold cfg-phone">+92 300 1234567</h3>
+                            <p class="text-slate-400 text-sm">Call us directly or text on WhatsApp for fast response.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             PAGE 4: CONTACT & LOCATION
+        ========================================================== -->
+        <section id="view-contact" class="page-view py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-14">
+                    <span class="text-xs uppercase tracking-widest font-extrabold text-brand-600">Get in Touch</span>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">We’d Love to Hear From You</h1>
+                    <p class="text-slate-600 mt-2 text-sm sm:text-base">Have an inquiry, bulk order request, or feedback? Drop by the store or contact us anytime.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-12 gap-12">
+                    <!-- Contact Form Card -->
+                    <div class="lg:col-span-7 bg-white p-8 sm:p-10 rounded-3xl shadow-sm border border-slate-100">
+                        <h2 class="text-2xl font-bold text-slate-900 mb-6">Send Us a Direct Message</h2>
+                        
+                        <form id="contactForm" onsubmit="handleFormSubmit(event)" class="space-y-5">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Your Full Name *</label>
+                                <input type="text" id="contactName" required placeholder="e.g. Ahmad Khan" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Phone / WhatsApp Number *</label>
+                                <input type="tel" id="contactPhone" required placeholder="e.g. 0300 1234567" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Your Message or Grocery Inquiry *</label>
+                                <textarea id="contactMessage" required rows="4" placeholder="How can we help you? (Item inquiry, order query, or suggestion)" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition"></textarea>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                                <button type="submit" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 px-6 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-md shadow-brand-600/20">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                    <span>Send Message</span>
+                                </button>
+                                <button type="button" onclick="sendFormViaWhatsApp()" class="flex-1 bg-emerald-50 hover:bg-emerald-100 text-brand-700 font-bold py-3.5 px-6 rounded-xl border border-brand-200 transition text-sm flex items-center justify-center gap-2">
+                                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                                    <span>Send Directly to WhatsApp</span>
+                                </button>
+                            </div>
+                            
+                            <div id="formSuccessAlert" class="hidden p-4 rounded-xl bg-brand-50 border border-brand-200 text-brand-800 text-xs font-semibold">
+                                <i class="fa-solid fa-circle-check mr-1.5"></i> Thank you! Your message has been received. We will respond shortly!
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Store Contact & Map Info -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <!-- Info Card -->
+                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 space-y-6">
+                            <h3 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-4">Store Information</h3>
+                            
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0 text-base">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs uppercase font-bold text-slate-400">Our Location</h4>
+                                    <p class="text-sm font-semibold text-slate-800 cfg-location">Shop #14, Green Valley Commercial Center, Main Boulevard, Sector G-11, Islamabad</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-accent-50 text-accent-600 flex items-center justify-center shrink-0 text-base">
+                                    <i class="fa-solid fa-clock"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs uppercase font-bold text-slate-400">Timings</h4>
+                                    <p class="text-sm font-semibold text-slate-800 cfg-timings">Open 7 Days a Week: 07:30 AM – 11:30 PM</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0 text-base">
+                                    <i class="fa-solid fa-phone"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs uppercase font-bold text-slate-400">Phone & WhatsApp</h4>
+                                    <p class="text-sm font-semibold text-slate-800 cfg-phone">+92 300 1234567</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center shrink-0 text-base">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs uppercase font-bold text-slate-400">Email Address</h4>
+                                    <p class="text-sm font-semibold text-slate-800 cfg-email">support@freshcornermart.com</p>
+                                </div>
+                            </div>
+
+                            <!-- Social Icons -->
+                            <div class="pt-4 border-t border-slate-100">
+                                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-3">Connect With Us</span>
+                                <div class="flex items-center gap-3">
+                                    <a href="#" class="w-9 h-9 rounded-lg bg-slate-100 text-slate-600 hover:bg-brand-600 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+                                    <a href="#" class="w-9 h-9 rounded-lg bg-slate-100 text-slate-600 hover:bg-brand-600 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-instagram text-sm"></i></a>
+                                    <a href="#" onclick="openWhatsAppOrder()" class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-whatsapp text-sm"></i></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Google Maps Embed -->
+                        <div class="rounded-3xl overflow-hidden shadow-sm border border-slate-200 h-64 bg-slate-200">
+                            <iframe id="storeMap" src="about:blank" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Floating WhatsApp Action Button -->
+    <aside aria-label="WhatsApp Quick Contact">
+        <div class="fixed bottom-6 right-6 z-50 flex items-center group">
+            <span class="hidden group-hover:inline-block bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow-lg mr-2 transition">
+                Order on WhatsApp!
+            </span>
+            <a href="#" onclick="openWhatsAppOrder()" class="whatsapp-pulse w-14 h-14 bg-brand-500 hover:bg-brand-600 text-white rounded-full flex items-center justify-center text-3xl shadow-xl transition transform hover:scale-110" aria-label="Direct WhatsApp Chat">
+                <i class="fa-brands fa-whatsapp"></i>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Professional Business Footer -->
+    <footer class="bg-slate-950 text-slate-400 text-sm border-t border-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+                <!-- Col 1: Store Intro -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white text-xl">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                        </div>
+                        <span class="text-2xl font-black text-white cfg-name">FreshCorner</span>
+                    </div>
+                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed max-w-sm cfg-tagline">
+                        Your Daily Dose of Freshness & Quality. Trusted local grocers serving you with fresh farm harvests and home essentials daily.
+                    </p>
+                    <div class="pt-2">
+                        <span class="inline-flex items-center gap-2 text-xs font-semibold text-brand-400 bg-brand-950/80 px-3 py-1.5 rounded-lg border border-brand-800">
+                            <i class="fa-solid fa-truck"></i> Free neighborhood delivery on eligible orders
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Col 2: Quick Links -->
+                <div>
+                    <h4 class="text-white text-xs font-bold uppercase tracking-wider mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-xs font-medium">
+                        <li><a href="#home" onclick="navigate('home')" class="hover:text-brand-400 transition">Home</a></li>
+                        <li><a href="#products" onclick="navigate('products')" class="hover:text-brand-400 transition">Shop by Category</a></li>
+                        <li><a href="#about" onclick="navigate('about')" class="hover:text-brand-400 transition">About Our Mart</a></li>
+                        <li><a href="#contact" onclick="navigate('contact')" class="hover:text-brand-400 transition">Store Timings & Map</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Categories -->
+                <div>
+                    <h4 class="text-white text-xs font-bold uppercase tracking-wider mb-4">Departments</h4>
+                    <ul class="space-y-2 text-xs font-medium">
+                        <li><a href="#products" onclick="navigate('products'); filterByName('Groceries')" class="hover:text-brand-400 transition">Flour, Pulses & Oil</a></li>
+                        <li><a href="#products" onclick="navigate('products'); filterByName('Fruits')" class="hover:text-brand-400 transition">Fresh Farm Produce</a></li>
+                        <li><a href="#products" onclick="navigate('products'); filterByName('Dairy')" class="hover:text-brand-400 transition">Pure Milk, Eggs & Cheese</a></li>
+                        <li><a href="#products" onclick="navigate('products'); filterByName('Household')" class="hover:text-brand-400 transition">Cleaning & Laundry</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Reach Us -->
+                <div>
+                    <h4 class="text-white text-xs font-bold uppercase tracking-wider mb-4">Contact Mart</h4>
+                    <ul class="space-y-3 text-xs">
+                        <li class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-location-dot text-brand-500 mt-1"></i>
+                            <span class="cfg-city">Islamabad, Pakistan</span>
+                        </li>
+                        <li class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-phone text-brand-500"></i>
+                            <span class="cfg-phone">+92 300 1234567</span>
+                        </li>
+                        <li class="flex items-center gap-2.5">
+                            <i class="fa-brands fa-whatsapp text-brand-500"></i>
+                            <span>Quick Chat Available</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Sub-footer -->
+            <div class="mt-12 pt-8 border-t border-slate-900 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
+                <p>&copy; <span id="currentYear"></span> <span class="cfg-name">FreshCorner Mart</span>. All rights reserved.</p>
+                <div class="flex items-center gap-6">
+                    <span class="text-slate-500">Cash on Delivery & Bank Transfer Accepted</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- =========================================================
+         JAVASCRIPT LOGIC
+    ========================================================== -->
+    <script>
+        // 1. DATA SOURCE (Admin-friendly structure to easily add/edit categories and items)
+        const CATEGORIES_DATA = [
+            {
+                id: 1,
+                title: "Fresh Fruits & Vegetables",
+                tag: "food",
+                badge: "Farm Harvested",
+                description: "Apples, bananas, seasonal citrus, farm potatoes, juicy tomatoes, and fresh leafy greens.",
+                image: "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=700&q=80",
+                popularItems: ["Farm Potatoes", "Organic Tomatoes", "Bananas", "Apples"]
+            },
+            {
+                id: 2,
+                title: "Daily Groceries & Staples",
+                tag: "daily",
+                badge: "Household Must-have",
+                description: "Premium Basmati rice, chakki atta (flour), daals (lentils), pure ghee, cooking oils, and whole spices.",
+                image: "https://images.unsplash.com/photo-1588964895597-cfccd6e2dbf9?auto=format&fit=crop&w=700&q=80",
+                popularItems: ["Basmati Rice 5kg", "Cooking Oil", "Chakki Atta", "Lentils"]
+            },
+            {
+                id: 3,
+                title: "Dairy, Eggs & Bakery",
+                tag: "daily",
+                badge: "Delivered Fresh",
+                description: "Pasteurized milk, farm eggs, artisan breads, unsalted butter, cheese blocks, and fresh yogurt.",
+                image: "https://images.unsplash.com/photo-1528750997573-59b89d56f4f7?auto=format&fit=crop&w=700&q=80",
+                popularItems: ["Farm Eggs Tray", "Fresh Milk", "Brown Bread", "Yogurt"]
+            },
+            {
+                id: 4,
+                title: "Beverages & Cold Drinks",
+                tag: "food",
+                badge: "Chilled & Ready",
+                description: "Natural juices, sodas, energy drinks, mineral water bottles, tea leaves, and premium instant coffee.",
+                image: "https://images.unsplash.com/photo-1527661591475-527312dd65f5?auto=format&fit=crop&w=700&q=80",
+                popularItems: ["Mineral Water 1.5L", "Assorted Juices", "Green Tea", "Cold Drinks"]
+            },
+            {
+                id: 5,
+                title: "Snacks, Biscuits & Sweets",
+                tag: "food",
+                badge: "Snack Time",
+                description: "Potato chips, salted nuts, tea cookies, chocolates, traditional snacks, and instant noodles.",
+                image: "https://images.unsplash.com/photo-1621996346565-e3d5d6281728?auto=format&fit=crop&w=700&q=80",
+                popularItems: ["Potato Chips", "Tea Biscuits", "Instant Noodles", "Chocolates"]
+            },
+            {
+                id: 6,
+                title: "Household & Cleaning",
+                tag: "home",
+                badge: "Sanitation",
+                description: "Washing powders, floor cleaners, dishwashing bars, tissue boxes, garbage bags, and room sprays.",
+                image: "https://images.unsplash.com/photo-1585421514738-01798e348b17?auto=format&fit=crop&w=700&q=80",
+                popularItems: ["Laundry Detergent", "Dish Wash Liquid", "Surface Disinfectant", "Tissue Roll"]
+            },
+            {
+                id: 7,
+                title: "Personal Care & Hygiene",
+                tag: "home",
+                badge: "Self Care",
+                description: "Herbal shampoos, hand soaps, toothpaste, body shower gels, razors, and baby grooming care.",
+                image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=700&q=80",
+                popularItems: ["Handwash Soap", "Anti-dandruff Shampoo", "Toothpaste", "Baby Wipes"]
+            }
+        ];
+
+        // 2. INITIALIZATION ON LOAD
+        document.addEventListener('DOMContentLoaded', () => {
+            applyStoreConfig();
+            renderCategories();
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Listen for Hash change (Back/Forward browser buttons)
+            window.addEventListener('hashchange', handleHashRouting);
+            handleHashRouting();
+        });
+
+        // 3. INJECT STORE CONFIG TO DOM
+        function applyStoreConfig() {
+            document.querySelectorAll('.cfg-name').forEach(el => el.textContent = STORE_CONFIG.name);
+            document.querySelectorAll('.cfg-tagline').forEach(el => el.textContent = STORE_CONFIG.tagline);
+            document.querySelectorAll('.cfg-phone').forEach(el => el.textContent = STORE_CONFIG.phone);
+            document.querySelectorAll('.cfg-location').forEach(el => el.textContent = STORE_CONFIG.location);
+            document.querySelectorAll('.cfg-city').forEach(el => el.textContent = STORE_CONFIG.city);
+            document.querySelectorAll('.cfg-email').forEach(el => el.textContent = STORE_CONFIG.email);
+            document.querySelectorAll('.cfg-timings').forEach(el => el.textContent = STORE_CONFIG.timings);
+            
+            const mapEl = document.getElementById('storeMap');
+            if(mapEl) mapEl.src = STORE_CONFIG.googleMapsIframe;
+        }
+
+        // 4. RENDER CATEGORIES
+        function renderCategories() {
+            const homeContainer = document.getElementById('homeCategoriesGrid');
+            const fullContainer = document.getElementById('fullProductsGrid');
+
+            // Render Home Preview (first 4 items)
+            if (homeContainer) {
+                homeContainer.innerHTML = CATEGORIES_DATA.slice(0, 4).map(cat => `
+                    <div class="bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 flex flex-col">
+                        <div class="relative h-44 overflow-hidden">
+                            <img src="${cat.image}" alt="${cat.title}" class="w-full h-full object-cover transform hover:scale-110 transition duration-500">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase text-brand-700 tracking-wider">${cat.badge}</span>
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow justify-between space-y-4">
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base mb-1.5 leading-snug">${cat.title}</h3>
+                                <p class="text-slate-500 text-xs line-clamp-2 leading-relaxed">${cat.description}</p>
+                            </div>
+                            <button onclick="enquireCategory('${cat.title}')" class="w-full inline-flex items-center justify-center gap-2 bg-brand-50 hover:bg-brand-600 text-brand-700 hover:text-white py-2.5 px-3 rounded-xl text-xs font-bold transition">
+                                <i class="fa-brands fa-whatsapp text-sm"></i>
+                                <span>Check Availability</span>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Render Full Products Page Grid
+            if (fullContainer) {
+                fullContainer.innerHTML = CATEGORIES_DATA.map(cat => `
+                    <div class="category-card bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col" data-title="${cat.title.toLowerCase()}" data-tag="${cat.tag}" data-desc="${cat.description.toLowerCase()}">
+                        <div class="relative h-56 overflow-hidden bg-slate-100">
+                            <img src="${cat.image}" alt="${cat.title}" class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
+                            <span class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-brand-800 shadow-sm">${cat.badge}</span>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow justify-between space-y-5">
+                            <div class="space-y-2">
+                                <h3 class="font-extrabold text-slate-900 text-lg leading-tight">${cat.title}</h3>
+                                <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">${cat.description}</p>
+                                
+                                <div class="pt-3">
+                                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Includes:</span>
+                                    <div class="flex flex-wrap gap-1.5">
+                                        ${cat.popularItems.map(item => `<span class="bg-slate-100 text-slate-700 text-[11px] font-medium px-2.5 py-1 rounded-lg">${item}</span>`).join('')}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-100 flex items-center gap-3">
+                                <button onclick="enquireCategory('${cat.title}')" class="w-full inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white py-3 px-4 rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-brand-600/20 transition">
+                                    <i class="fa-brands fa-whatsapp text-base"></i>
+                                    <span>Enquire on WhatsApp</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // 5. NAVIGATION / SPA CONTROLLER
+        function navigate(viewName) {
+            document.querySelectorAll('.page-view').forEach(view => {
+                view.classList.remove('active');
+            });
+
+            const targetView = document.getElementById(`view-${viewName}`);
+            if (targetView) {
+                targetView.classList.add('active');
+            }
+
+            // Update Nav link active states
+            document.querySelectorAll('.nav-link').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === `#${viewName}`) {
+                    link.classList.add('text-brand-600');
+                    link.classList.remove('text-slate-600');
+                } else {
+                    link.classList.remove('text-brand-600');
+                    link.classList.add('text-slate-600');
+                }
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function handleHashRouting() {
+            const hash = window.location.hash.replace('#', '') || 'home';
+            const validPages = ['home', 'products', 'about', 'contact'];
+            if (validPages.includes(hash)) {
+                navigate(hash);
+            } else {
+                navigate('home');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+        document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
+
+        // 6. WHATSAPP CLICK HANDLERS
+        function openWhatsAppOrder(customText) {
+            const defaultMessage = `Hello ${STORE_CONFIG.name}! I would like to place a grocery order. Please let me know what items are available today.`;
+            const text = encodeURIComponent(customText || defaultMessage);
+            window.open(`https://wa.me/${STORE_CONFIG.whatsapp}?text=${text}`, '_blank');
+        }
+
+        function enquireCategory(categoryName) {
+            const message = `Hello ${STORE_CONFIG.name}, I am interested in items from your *${categoryName}* category. Could you please share the current price list / stock?`;
+            openWhatsAppOrder(message);
+        }
+
+        // 7. PRODUCT SEARCH & FILTERS
+        function filterCategories() {
+            const query = document.getElementById('categorySearch').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.category-card');
+            let matchCount = 0;
+
+            cards.forEach(card => {
+                const title = card.getAttribute('data-title');
+                const desc = card.getAttribute('data-desc');
+                if (title.includes(query) || desc.includes(query)) {
+                    card.style.display = 'flex';
+                    matchCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            document.getElementById('categoryCountBadge').textContent = `${matchCount} Categories`;
+        }
+
+        function setFilter(filterTag) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.getAttribute('data-filter') === filterTag) {
+                    btn.classList.add('bg-brand-600', 'text-white');
+                    btn.classList.remove('bg-slate-100', 'text-slate-600');
+                } else {
+                    btn.classList.remove('bg-brand-600', 'text-white');
+                    btn.classList.add('bg-slate-100', 'text-slate-600');
+                }
+            });
+
+            const cards = document.querySelectorAll('.category-card');
+            let matchCount = 0;
+            cards.forEach(card => {
+                const tag = card.getAttribute('data-tag');
+                if (filterTag === 'all' || tag === filterTag) {
+                    card.style.display = 'flex';
+                    matchCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            document.getElementById('categoryCountBadge').textContent = `${matchCount} Categories`;
+        }
+
+        function filterByName(keyword) {
+            setTimeout(() => {
+                const searchInput = document.getElementById('categorySearch');
+                if (searchInput) {
+                    searchInput.value = keyword;
+                    filterCategories();
+                }
+            }, 100);
+        }
+
+        // 8. CONTACT FORM SUBMISSIONS
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const alertBox = document.getElementById('formSuccessAlert');
+            alertBox.classList.remove('hidden');
+            document.getElementById('contactForm').reset();
+            setTimeout(() => {
+                alertBox.classList.add('hidden');
+            }, 6000);
+        }
+
+        function sendFormViaWhatsApp() {
+            const name = document.getElementById('contactName').value.trim();
+            const phone = document.getElementById('contactPhone').value.trim();
+            const message = document.getElementById('contactMessage').value.trim();
+
+            if (!name || !message) {
+                alert("Please fill in your name and message first.");
+                return;
+            }
+
+            const formatted = `*New Customer Inquiry via Website*\nName: ${name}\nPhone: ${phone}\nMessage: ${message}`;
+            openWhatsAppOrder(formatted);
+        }
+    </script>
+</body>
+</html>
